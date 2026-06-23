@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Заявка на участие — Волна таланта</title>
+  <style>
+    :root {
+      --bg: #eef7ff;
+      --card: #ffffff;
+      --text: #18304a;
+      --muted: #64748b;
+      --line: #dbe7f4;
+      --blue: #0b4f8f;
+      --blue-2: #0e77c8;
+      --gold: #c99a35;
+      --error: #b42318;
+      --success: #087443;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(16, 145, 205, .22), transparent 36%),
+        linear-gradient(180deg, #f7fbff 0%, var(--bg) 100%);
+      min-height: 100vh;
+    }
+
+    .page {
+      width: min(1040px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #06294f 0%, #0b4f8f 55%, #1298c9 100%);
+      color: #fff;
+      border-radius: 28px;
+      padding: 34px 28px;
+      box-shadow: 0 24px 70px rgba(6, 41, 79, .22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: auto -80px -120px auto;
+      width: 360px;
+      height: 360px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: 14px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #dcefff;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 1;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 18px 0 0;
+      font-size: 17px;
+      line-height: 1.55;
+      color: #edf8ff;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 18px 0 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .fact {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .fact b {
+      display: block;
+      margin-bottom: 4px;
+      color: #fff2c6;
+      font-size: 13px;
+    }
+
+    .fact span {
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .card {
+      margin-top: 22px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 18px 55px rgba(11, 79, 143, .12);
+    }
+
+    .notice {
+      margin-bottom: 22px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: #fff8e7;
+      border: 1px solid #f0d58b;
+      color: #5f4508;
+      line-height: 1.5;
+    }
+
+    .section-title {
+      margin: 28px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+      color: var(--blue);
+      font-size: 22px;
+    }
+
+    .section-title:first-of-type { margin-top: 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field { margin-bottom: 16px; }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 700;
+      color: #243b53;
+    }
+
+    .required::after {
+      content: ' *';
+      color: var(--error);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #cbd9e8;
+      border-radius: 14px;
+      padding: 13px 14px;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--blue-2);
+      box-shadow: 0 0 0 4px rgba(14, 119, 200, .12);
+    }
+
+    .hint {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .checkbox {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #f8fbff;
+    }
+
+    .checkbox input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      flex: 0 0 auto;
+    }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 26px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-2));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 14px 28px rgba(11, 79, 143, .22);
+    }
+
+    button:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .status {
+      display: none;
+      margin-top: 18px;
+      padding: 15px 18px;
+      border-radius: 16px;
+      line-height: 1.5;
+    }
+
+    .status.success {
+      display: block;
+      background: #ecfdf3;
+      border: 1px solid #b7ebc6;
+      color: var(--success);
+    }
+
+    .status.error {
+      display: block;
+      background: #fff1f0;
+      border: 1px solid #ffc9c4;
+      color: var(--error);
+    }
+
+    .footer-note {
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    iframe[name="hiddenSubmitFrame"] {
+      display: none;
+      width: 0;
+      height: 0;
+      border: 0;
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 18px, 1040px); padding-top: 10px; }
+      .hero { border-radius: 20px; padding: 26px 18px; }
+      .facts { grid-template-columns: 1fr; }
+      .card { border-radius: 20px; padding: 18px; }
+      .grid { grid-template-columns: 1fr; gap: 0; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    ВАЖНО:
+    Это статичная страница для GitHub Pages.
+    Она отправляет заявку в Google Apps Script через обычный POST в скрытый iframe.
+    Так мы обходим CORS-ошибки и не встраиваем Apps Script в iframe.
+  -->
+
+  <div class="page">
+    <header class="hero">
+      <p class="eyebrow">Международный творческий кастинг-конкурс</p>
+      <h1>Волна таланта</h1>
+      <p class="subtitle">Заявка на участие в дистанционном творческом конкурсе по фото и видеозаписям конкурсных работ.</p>
+
+      <div class="facts">
+        <div class="fact"><b>Приём заявок</b><span>до 12 июля 2026 года включительно</span></div>
+        <div class="fact"><b>Итоги</b><span>с 17 июля 2026 года</span></div>
+        <div class="fact"><b>Организационный взнос</b><span>не взимается</span></div>
+      </div>
+    </header>
+
+    <main class="card">
+      <div class="notice">
+        На каждую конкурсную работу заполняется отдельная заявка. После отправки заявки на указанный e-mail поступит письмо-подтверждение.
+      </div>
+
+      <form
+        id="applicationForm"
+        method="post"
+        action="https://script.google.com/macros/s/AKfycbww6QjPIdvNd2ewUYRlcKl6oyQpnUGYA8WoLCiwuFpvbRk3aK0QWrkEnn9EQNY6Djgg/exec"
+        target="hiddenSubmitFrame"
+      >
+        <input type="hidden" name="source" id="source" value="" />
+        <input type="hidden" name="userAgent" id="userAgent" value="" />
+
+        <h2 class="section-title">1. Контактные данные</h2>
+
+        <div class="grid">
+          <div class="field">
+            <label class="required" for="email">E-mail заявителя</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+            <div class="hint">На этот адрес придёт письмо-подтверждение.</div>
+          </div>
+
+          <div class="field">
+            <label for="phone">Телефон / мессенджер</label>
+            <input id="phone" name="phone" type="text" autocomplete="tel" placeholder="Например: +7 900 000-00-00" />
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="country">Страна</label>
+            <input id="country" name="country" type="text" placeholder="Например: Россия" />
+          </div>
+
+          <div class="field">
+            <label for="city">Город / населённый пункт</label>
+            <input id="city" name="city" type="text" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="organization">Организация / учреждение</label>
+          <input id="organization" name="organization" type="text" placeholder="Можно оставить пустым, если участник заявляется самостоятельно" />
+        </div>
+
+        <h2 class="section-title">2. Данные участника</h2>
+
+        <div class="grid">
+          <div class="field">
+            <label for="participantFormat">Формат участия</label>
+            <select id="participantFormat" name="participantFormat">
+              <option value="">Выберите вариант</option>
+              <option>Солист</option>
+              <option>Дуэт</option>
+              <option>Ансамбль / коллектив</option>
+              <option>Оркестр</option>
+              <option>Хор</option>
+              <option>Автор</option>
+              <option>Другое</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="participantCount">Количество участников в коллективе</label>
+            <input id="participantCount" name="participantCount" type="number" min="1" placeholder="Для солиста можно указать 1" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="required" for="participantName">ФИО участника / название коллектива</label>
+          <input id="participantName" name="participantName" type="text" required />
+        </div>
+
+        <div class="field">
+          <label class="required" for="ageCategory">Возрастная категория</label>
+          <select id="ageCategory" name="ageCategory" required>
+            <option value="">Выберите категорию</option>
+            <option>до 7 лет</option>
+            <option>8–11 лет</option>
+            <option>12–15 лет</option>
+            <option>16–17 лет</option>
+            <option>18–21 год</option>
+            <option>22–25 лет</option>
+            <option>от 26 лет</option>
+            <option>смешанная категория</option>
+            <option>Учитель и ученик</option>
+          </select>
+        </div>
+
+        <h2 class="section-title">3. Конкурсная работа</h2>
+
+        <div class="field">
+          <label class="required" for="nomination">Номинация</label>
+          <select id="nomination" name="nomination" required>
+            <option value="">Выберите номинацию</option>
+            <option>Народные инструменты</option>
+            <option>Фортепиано</option>
+            <option>Духовые и ударные инструменты</option>
+            <option>Струнно-смычковые инструменты</option>
+            <option>Электронные музыкальные инструменты</option>
+            <option>Симфонический оркестр</option>
+            <option>Эстрадно-джазовый оркестр</option>
+            <option>Вокал</option>
+            <option>Авторская песня</option>
+            <option>Танец</option>
+            <option>Художественное слово</option>
+            <option>Спектакль</option>
+            <option>Изобразительное искусство</option>
+            <option>Декоративно-прикладное искусство</option>
+            <option>Фотография</option>
+            <option>Театр мод и дизайн одежды</option>
+            <option>Видеоклипы и любительское кино</option>
+            <option>Цирковое искусство</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="required" for="workTitle">Название конкурсной работы</label>
+          <input id="workTitle" name="workTitle" type="text" required />
+        </div>
+
+        <div class="field">
+          <label class="required" for="workLink">Ссылка на конкурсный материал</label>
+          <input id="workLink" name="workLink" type="url" placeholder="https://..." required />
+          <div class="hint">Укажите ссылку на Яндекс Диск, Google Диск, Облако Mail.ru, ВКонтакте или другой ресурс. Доступ по ссылке должен быть открыт.</div>
+        </div>
+
+        <h2 class="section-title">4. Руководители и сопровождающие</h2>
+
+        <div class="field">
+          <label for="leader1">Руководитель 1</label>
+          <input id="leader1" name="leader1" type="text" placeholder="ФИО полностью" />
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="leader2">Руководитель 2</label>
+            <input id="leader2" name="leader2" type="text" placeholder="При наличии" />
+          </div>
+
+          <div class="field">
+            <label for="leader3">Руководитель 3</label>
+            <input id="leader3" name="leader3" type="text" placeholder="При наличии" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="accompanist">Концертмейстер</label>
+          <input id="accompanist" name="accompanist" type="text" placeholder="При наличии" />
+        </div>
+
+        <h2 class="section-title">5. Дополнительно</h2>
+
+        <div class="field">
+          <label for="comment">Комментарий к заявке</label>
+          <textarea id="comment" name="comment" placeholder="Дополнительная информация, если необходимо"></textarea>
+        </div>
+
+        <label class="checkbox">
+          <input type="checkbox" name="consent" value="Да" required />
+          <span>Я подтверждаю согласие с условиями Положения конкурса и даю согласие на обработку данных, указанных в заявке.</span>
+        </label>
+
+        <div class="actions">
+          <button id="submitButton" type="submit">Отправить заявку</button>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <p class="footer-note">
+          Если письмо-подтверждение не пришло в течение нескольких минут, проверьте папки «Спам», «Промоакции» или «Рассылки».
+        </p>
+      </form>
+
+      <iframe name="hiddenSubmitFrame" id="hiddenSubmitFrame"></iframe>
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById('applicationForm');
+    const button = document.getElementById('submitButton');
+    const statusBox = document.getElementById('status');
+    const sourceInput = document.getElementById('source');
+    const userAgentInput = document.getElementById('userAgent');
+    const hiddenFrame = document.getElementById('hiddenSubmitFrame');
+
+    let formSubmitted = false;
+
+    sourceInput.value = window.location.href;
+    userAgentInput.value = navigator.userAgent;
+
+    form.addEventListener('submit', function () {
+      formSubmitted = true;
+      button.disabled = true;
+      button.textContent = 'Отправляем заявку...';
+      statusBox.className = 'status';
+      statusBox.textContent = '';
+    });
+
+    hiddenFrame.addEventListener('load', function () {
+      if (!formSubmitted) return;
+
+      statusBox.className = 'status success';
+      statusBox.innerHTML = 'Спасибо! Заявка отправлена. В ближайшее время на указанный e-mail придёт письмо-подтверждение о том, что заявка поступила и направлена на обработку.';
+
+      form.reset();
+      sourceInput.value = window.location.href;
+      userAgentInput.value = navigator.userAgent;
+
+      button.disabled = false;
+      button.textContent = 'Отправить заявку';
+      formSubmitted = false;
+
+      window.scrollTo({ top: statusBox.offsetTop - 120, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
