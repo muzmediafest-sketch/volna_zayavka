@@ -275,10 +275,18 @@
 </head>
 <body>
   <!--
-    ВАЖНО:
-    Это статичная страница для GitHub Pages.
-    Она отправляет заявку в Google Apps Script через обычный POST в скрытый iframe.
-    Так мы обходим CORS-ошибки и не встраиваем Apps Script в iframe.
+    ============================================================
+    ФОРМА ПРИЁМА ЗАЯВОК · «Волна таланта»
+    Статичная страница для GitHub Pages.
+    Заявка отправляется в Google Apps Script обычным POST в
+    скрытый iframe — так мы обходим CORS и не встраиваем
+    Apps Script в видимый iframe.
+
+    ПЕРЕД ПУБЛИКАЦИЕЙ: в теге <form> ниже замените значение
+    action="ВСТАВЬТЕ_СЮДА_АДРЕС_APPS_SCRIPT" на URL вашего
+    веб-приложения Apps Script (заканчивается на /exec).
+    См. файл «Инструкция_подключение_формы.md».
+    ============================================================
   -->
 
   <div class="page">
@@ -296,14 +304,13 @@
 
     <main class="card">
       <div class="notice">
-        На каждую конкурсную работу заполняется отдельная заявка. После отправки заявки на указанный e-mail поступит письмо-подтверждение.
+        На каждую конкурсную работу заполняется отдельная заявка. После отправки заявки на указанный e-mail поступит письмо-подтверждение о том, что заявка принята и направлена на обработку.
       </div>
 
       <form
         id="applicationForm"
         method="post"
-        action="https://script.google.com/macros/s/AKfycbww6QjPIdvNd2ewUYRlcKl6oyQpnUGYA8WoLCiwuFpvbRk3aK0QWrkEnn9EQNY6Djgg/exec"
-        <!-- СЮДА вставляется ссылка на развернутое веб-приложение Google Apps Script -->
+        action="https://script.google.com/macros/s/AKfycbz6JDhRk4Rf8KG6Nz5D9oBioI4C4B4_wRg-BLaFcUCa5BHCFXjeRRQmGQQOO7lJUYFr/exec"
         target="hiddenSubmitFrame"
       >
         <input type="hidden" name="source" id="source" value="" />
@@ -487,7 +494,16 @@
     sourceInput.value = window.location.href;
     userAgentInput.value = navigator.userAgent;
 
-    form.addEventListener('submit', function () {
+    form.addEventListener('submit', function (e) {
+      // Согласие обязательно — иначе заявка не отправляется
+      const consent = form.querySelector('input[name="consent"]');
+      if (consent && !consent.checked) {
+        e.preventDefault();
+        statusBox.className = 'status error';
+        statusBox.textContent = 'Чтобы отправить заявку, подтвердите согласие с Положением конкурса и обработкой данных.';
+        return;
+      }
+
       formSubmitted = true;
       button.disabled = true;
       button.textContent = 'Отправляем заявку...';
